@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fiber-api
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    networks:
+      - Heepoke
+  postgres:
+    container_name: postgres-db
+    image: postgres:latest
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    networks:
+      - Heepoke
+
+networks:
+  Heepoke:
+    driver: bridge
