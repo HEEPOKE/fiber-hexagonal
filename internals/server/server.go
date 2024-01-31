@@ -3,6 +3,9 @@ package server
 import (
 	"log"
 
+	"github.com/HEEPOKE/fiber-hexagonal/internals/app/handlers"
+	"github.com/HEEPOKE/fiber-hexagonal/internals/app/services"
+	"github.com/HEEPOKE/fiber-hexagonal/internals/core/interfaces"
 	_ "github.com/HEEPOKE/fiber-hexagonal/pkg/docs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
@@ -15,10 +18,11 @@ import (
 )
 
 type Server struct {
-	fib *fiber.App
+	fib            *fiber.App
+	accountHandler *handlers.AccountHandler
 }
 
-func NewServer() *Server {
+func NewServer(accountRepository interfaces.AccountRepositoryInterface) *Server {
 	app := fiber.New(fiber.Config{
 		ServerHeader:             "Fiber",
 		AppName:                  "App v1.0",
@@ -38,8 +42,12 @@ func NewServer() *Server {
 		TimeZone:   "Asia/Bangkok",
 	}))
 
+	accountService := services.NewAccountService(accountRepository)
+	accountHandler := handlers.NewAccountHandler(*accountService)
+
 	return &Server{
-		fib: app,
+		fib:            app,
+		accountHandler: accountHandler,
 	}
 }
 
@@ -63,4 +71,7 @@ func (s *Server) routeConfig() {
 
 	apis.Get("/docs/*", basicauth.New(basicAuthMiddleware), swagger.HandlerDefault)
 	apis.Get("/monitor", monitor.New(monitor.Config{Title: "Monitor Page"}))
+
+	account := apis.Group("/accounts")
+	account.Get("/", s.accountHandler.GetListAccountAll)
 }

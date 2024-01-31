@@ -16,7 +16,7 @@ func NewAccountHandler(accountService services.AccountService) *AccountHandler {
 }
 
 func (ah *AccountHandler) GetListAccountAll(c *fiber.Ctx) error {
-	accounts, err := ah.accountService.GetGenerateAll()
+	accounts, err := ah.accountService.GetAccountsAll()
 	if err != nil {
 		errorMessage := err.Error()
 		responseData := response.StatusMessage{

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/repositories"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/server"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/configs"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/database"
@@ -25,12 +26,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	_, err = database.ConnectDatabase()
+	db, err := database.ConnectDatabase()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	accountRepository := repositories.NewAccountRepository(db)
+
 	address := fmt.Sprintf(":%s", configs.Cfg.PORT)
-	route := server.NewServer()
+	route := server.NewServer(accountRepository)
 	route.Init(address)
 }

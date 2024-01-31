@@ -9,10 +9,10 @@ type AccountService struct {
 	accountRepository interfaces.AccountRepositoryInterface
 }
 
-func NewGenerateService(accountRepository interfaces.AccountRepositoryInterface) *AccountService {
+func NewAccountService(accountRepository interfaces.AccountRepositoryInterface) *AccountService {
 	return &AccountService{accountRepository: accountRepository}
 }
 
-func (a *AccountService) GetGenerateAll() ([]*models.AccountModel, error) {
+func (a *AccountService) GetAccountsAll() ([]*models.AccountModel, error) {
 	return a.accountRepository.GetAccountsAll()
 }
