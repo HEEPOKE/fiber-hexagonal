@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/configs"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -32,5 +33,6 @@ func ConnectDatabase() (*gorm.DB, error) {
 		return nil, err
 	}
 
+	db.AutoMigrate(&models.AccountModel{}, &models.BlogModel{})
 	return db, nil
 }
