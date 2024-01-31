@@ -14,7 +14,9 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var Rdb *redis.Client
+var (
+	Rdb *redis.Client
+)
 
 func ConnectDatabase() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
