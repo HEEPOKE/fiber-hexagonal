@@ -15,6 +15,15 @@ func NewAccountHandler(accountService services.AccountService) *AccountHandler {
 	return &AccountHandler{accountService: accountService}
 }
 
+// Get List All Accounts Data
+// @Summary Get List All Accounts Data
+// @Description Get List All Accounts Data
+// @Tags Accounts
+// @Accept application/json
+// @Produce json
+// @Router /accounts [get]
+// @Success 200 {object} examples.SuccessAccountsGetAllResponse
+// @Failure 400 {object} examples.FailedCommonResponse
 func (ah *AccountHandler) GetListAccountAll(c *fiber.Ctx) error {
 	accounts, err := ah.accountService.GetAccountsAll()
 	if err != nil {
