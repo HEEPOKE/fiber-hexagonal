@@ -5,6 +5,7 @@ import (
 
 	_ "github.com/HEEPOKE/fiber-hexagonal/internals/app/docs"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -54,6 +55,12 @@ func (s *Server) Init(address string) {
 func (s *Server) routeConfig() {
 	apis := s.fib.Group("/apis")
 
-	apis.Get("/docs/*", swagger.HandlerDefault)
+	basicAuthMiddleware := basicauth.Config{
+		Users: map[string]string{
+			"admin": "        ",
+		},
+	}
+
+	apis.Get("/docs/*", basicauth.New(basicAuthMiddleware), swagger.HandlerDefault)
 	apis.Get("/monitor", monitor.New(monitor.Config{Title: "Monitor Page"}))
 }
