@@ -12,6 +12,24 @@ services:
     networks:
       - Heepoke
 
+  redis:
+    image: redis:latest
+    container_name: fiber-redis
+    hostname: redis
+    env_file:
+      - .env
+    command: ["redis-server", "--include", "/usr/local/etc/redis/redis.conf", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    ports:
+     - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - redis-data:/var/lib/redis
+      - "./pkg/redis/conf/generate.conf:/usr/local/etc/redis/redis.conf"
+    environment:
+      REDIS_REPLICATION_MODE: ${REDIS_REPLICATION_MODE}
+      REDIS_PASSWORD: 
+    networks:
+      - Heepoke
+
   api:
     build:
       context: .
@@ -26,8 +44,12 @@ services:
       - ${PORT}:${PORT}
     depends_on:
       - fiber-db
+      - redis
     networks:
       - Heepoke
+
+volumes:
+  redis-data:
 
 networks:
   Heepoke:

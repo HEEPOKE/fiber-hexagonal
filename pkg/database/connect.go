@@ -8,10 +8,13 @@ import (
 
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/configs"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+var Rdb *redis.Client
 
 func ConnectDatabase() (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
@@ -35,4 +38,13 @@ func ConnectDatabase() (*gorm.DB, error) {
 
 	db.AutoMigrate(&models.AccountModel{}, &models.BlogModel{})
 	return db, nil
+}
+
+func ConnectToRedis() *redis.Client {
+	client := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%s", configs.Cfg.REDIS_URL, configs.Cfg.REDIS_PORT),
+		Password: configs.Cfg.REDIS_PASSWORD,
+		DB:       0,
+	})
+	return client
 }
