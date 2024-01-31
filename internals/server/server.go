@@ -56,7 +56,7 @@ func (s *Server) Init(address string) {
 
 	apis := s.fib.Group("/apis")
 	apis.Get("/docs/*", basicauth.New(basicAuthMiddleware), swagger.HandlerDefault)
-	apis.Get("/monitor", monitor.New(monitor.Config{Title: "Monitor Page"}))
+	apis.Get("/monitor", basicauth.New(basicAuthMiddleware), monitor.New(monitor.Config{Title: "Monitor Page"}))
 
 	routes.SetupRoutesAccount(s.fib, s.db)
 
