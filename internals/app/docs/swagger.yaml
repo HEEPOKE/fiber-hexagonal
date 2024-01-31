@@ -1,0 +1,15 @@
+basePath: /apis
+host: localhost:6476
+info:
+  contact:
+    email: Damon1FX@gmail.com
+    name: Heepoke
+    url: https://github.com/HEEPOKE
+  description: This is a Go Fiber Hexagonal API server.
+  title: Go Fiber Hexagonal API
+  version: "1.0"
+paths: {}
+schemes:
+- http
+- https
+swagger: "2.0"

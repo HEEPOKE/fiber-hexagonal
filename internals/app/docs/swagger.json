@@ -1,0 +1,20 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a Go Fiber Hexagonal API server.",
+        "title": "Go Fiber Hexagonal API",
+        "contact": {
+            "name": "Heepoke",
+            "url": "https://github.com/HEEPOKE",
+            "email": "Damon1FX@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:6476",
+    "basePath": "/apis",
+    "paths": {}
+}

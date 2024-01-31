@@ -6,6 +6,7 @@
         "gorm",
         "HEEPOKE",
         "joho",
+        "Prefork",
         "sslmode"
     ]
 }
