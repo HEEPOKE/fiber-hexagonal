@@ -1,5 +1,17 @@
-version: '3.9'
+version: '3.8'
 services:
+  fiber-db:
+    image: postgres:latest
+    container_name: fiber-db
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - Heepoke
+
   api:
     build:
       context: .
@@ -13,18 +25,7 @@ services:
     ports:
       - ${PORT}:${PORT}
     depends_on:
-      - postgres
-    networks:
-      - Heepoke
-  postgres:
-    container_name: postgres-db
-    image: postgres:latest
-    ports:
-      - ${DB_PORT}:${DB_PORT}
-    environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+      - fiber-db
     networks:
       - Heepoke
 
