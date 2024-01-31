@@ -32,6 +32,8 @@ swag init -g cmd/main.go --output=internals/app/docs
 
 ## Local Swagger Doc Api
 
-```bash
-http://localhost:6476/apis/docs/index.html
-```
+<http://localhost:6476/apis/docs/index.html>
+
+## Monitor
+
+<http://localhost:6476/apis/monitor>
