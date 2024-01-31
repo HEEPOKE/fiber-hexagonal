@@ -1,9 +1,11 @@
 {
     "cSpell.words": [
+        "dbname",
         "godotenv",
         "gofiber",
         "gorm",
         "HEEPOKE",
-        "joho"
+        "joho",
+        "sslmode"
     ]
 }
