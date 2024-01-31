@@ -27,7 +27,7 @@ go mod tidy
 ## Generate Swagger
 
 ```bash
-swag init -g cmd/main.go --output=internals/app/docs
+swag init -g cmd/main.go --output=pkg/docs
 ```
 
 ## Local Swagger Doc Api

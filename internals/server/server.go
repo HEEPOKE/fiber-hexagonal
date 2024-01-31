@@ -3,7 +3,7 @@ package server
 import (
 	"log"
 
-	_ "github.com/HEEPOKE/fiber-hexagonal/internals/app/docs"
+	_ "github.com/HEEPOKE/fiber-hexagonal/pkg/docs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
