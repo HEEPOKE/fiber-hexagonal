@@ -1,11 +1,11 @@
 package response
 
 type StatusMessage struct {
-	Code        string `json:"code"`
-	Message     string `json:"message"`
-	Service     string `json:"service"`
-	Description string `json:"description"`
-	Error       *error `json:"error"`
+	Code        string  `json:"code"`
+	Message     string  `json:"message"`
+	Service     string  `json:"service"`
+	Description string  `json:"description"`
+	Error       *string `json:"error"`
 }
 
 type ResponseMessage struct {
