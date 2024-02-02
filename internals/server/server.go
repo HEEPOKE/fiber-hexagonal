@@ -1,9 +1,11 @@
 package server
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/HEEPOKE/fiber-hexagonal/internals/server/routes"
+	"github.com/HEEPOKE/fiber-hexagonal/pkg/configs"
 	_ "github.com/HEEPOKE/fiber-hexagonal/pkg/docs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
@@ -22,9 +24,10 @@ type Server struct {
 }
 
 func NewServer(db *gorm.DB) *Server {
+	version := fmt.Sprintf("App v%s", configs.Cfg.VERSION)
 	app := fiber.New(fiber.Config{
 		ServerHeader:             "Fiber",
-		AppName:                  "App v1.0",
+		AppName:                  version,
 		CaseSensitive:            true,
 		StrictRouting:            true,
 		Prefork:                  true,

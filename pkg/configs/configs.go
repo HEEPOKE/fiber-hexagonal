@@ -25,6 +25,7 @@ type Config struct {
 	REDIS_PASSWORD         string
 	REDIS_REPLICATION_MODE string
 	SECRET_KEY             string
+	VERSION                string
 }
 
 func LoadConfig() (*Config, error) {
@@ -48,6 +49,7 @@ func LoadConfig() (*Config, error) {
 		REDIS_PASSWORD:         os.Getenv("REDIS_PASSWORD"),
 		REDIS_REPLICATION_MODE: os.Getenv("REDIS_REPLICATION_MODE"),
 		SECRET_KEY:             os.Getenv("SECRET_KEY"),
+		VERSION:                os.Getenv("VERSION"),
 	}
 
 	Cfg = config
