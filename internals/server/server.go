@@ -7,6 +7,7 @@ import (
 	"github.com/HEEPOKE/fiber-hexagonal/internals/server/routes"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/configs"
 	_ "github.com/HEEPOKE/fiber-hexagonal/pkg/docs"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -19,8 +20,9 @@ import (
 )
 
 type Server struct {
-	fib *fiber.App
-	db  *gorm.DB
+	fib       *fiber.App
+	db        *gorm.DB
+	validator *validator.Validate
 }
 
 func NewServer(db *gorm.DB) *Server {
@@ -45,8 +47,9 @@ func NewServer(db *gorm.DB) *Server {
 	}))
 
 	return &Server{
-		fib: app,
-		db:  db,
+		fib:       app,
+		db:        db,
+		validator: validator.New(),
 	}
 }
 
@@ -61,7 +64,7 @@ func (s *Server) Init(address string) {
 	apis.Get("/docs/*", basicauth.New(basicAuthMiddleware), swagger.HandlerDefault)
 	apis.Get("/monitor", basicauth.New(basicAuthMiddleware), monitor.New(monitor.Config{Title: "Monitor Page"}))
 
-	routes.SetupRoutesAuth(s.fib, s.db)
+	routes.SetupRoutesAuth(s.fib, s.db, s.validator)
 	routes.SetupRoutesAccount(s.fib, s.db)
 
 	err := s.fib.Listen(address)

@@ -7,15 +7,20 @@ import (
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models/requests"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models/response"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/constants"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
 type AuthHandler struct {
 	authService services.AuthService
+	validator   *validator.Validate
 }
 
-func NewAuthHandler(authService services.AuthService) *AuthHandler {
-	return &AuthHandler{authService: authService}
+func NewAuthHandler(authService services.AuthService, validator *validator.Validate) *AuthHandler {
+	return &AuthHandler{
+		authService: authService,
+		validator:   validator,
+	}
 }
 
 // Register
@@ -46,7 +51,7 @@ func (ah *AuthHandler) Register(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := common.ValidatorCommon(c, &DataRequest, constants.AUTH_SERVICE, constants.AUTH_REGISTER_ACCOUNT_FAILED); err != nil {
+	if err := common.ValidatorCommon(c, ah.validator, &DataRequest, constants.AUTH_SERVICE, constants.AUTH_REGISTER_ACCOUNT_FAILED); err != nil {
 		return err
 	}
 
