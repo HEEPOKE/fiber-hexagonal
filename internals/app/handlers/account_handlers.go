@@ -21,6 +21,7 @@ func NewAccountHandler(accountService services.AccountService) *AccountHandler {
 // @Tags Accounts
 // @Accept application/json
 // @Produce json
+// @param Authorization header string true "Bearer token"
 // @Router /accounts [get]
 // @Success 200 {object} examples.SuccessAccountsGetAllResponse
 // @Failure 400 {object} examples.FailedCommonResponse

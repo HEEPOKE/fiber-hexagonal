@@ -31,6 +31,13 @@ definitions:
       status:
         $ref: '#/definitions/examples.SuccessStatusMessage'
     type: object
+  examples.SuccessRegisterAccountResponse:
+    properties:
+      payload:
+        type: string
+      status:
+        $ref: '#/definitions/examples.SuccessStatusMessage'
+    type: object
   examples.SuccessStatusMessage:
     properties:
       code:
@@ -106,6 +113,28 @@ definitions:
     required:
     - name
     type: object
+  requests.RegisterRequest:
+    properties:
+      age:
+        example: 25
+        type: integer
+      email:
+        example: example@gmail.com
+        type: string
+      password:
+        example: "123425678"
+        maxLength: 20
+        minLength: 8
+        type: string
+      username:
+        example: user
+        type: string
+    required:
+    - age
+    - email
+    - password
+    - username
+    type: object
 host: localhost:6476
 info:
   contact:
@@ -121,6 +150,12 @@ paths:
       consumes:
       - application/json
       description: Get List All Accounts Data
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -135,6 +170,32 @@ paths:
       summary: Get List All Accounts Data
       tags:
       - Accounts
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: register account
+      parameters:
+      - description: Register Request
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/examples.SuccessRegisterAccountResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/examples.FailedCommonResponse'
+      summary: register account
+      tags:
+      - Auth
 schemes:
 - http
 - https

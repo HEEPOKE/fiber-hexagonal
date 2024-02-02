@@ -32,11 +32,60 @@ const docTemplate = `{
                     "Accounts"
                 ],
                 "summary": "Get List All Accounts Data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/examples.SuccessAccountsGetAllResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/examples.FailedCommonResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "register account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "register account",
+                "parameters": [
+                    {
+                        "description": "Register Request",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/examples.SuccessRegisterAccountResponse"
                         }
                     },
                     "400": {
@@ -90,6 +139,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/models.AccountModel"
                     }
+                },
+                "status": {
+                    "$ref": "#/definitions/examples.SuccessStatusMessage"
+                }
+            }
+        },
+        "examples.SuccessRegisterAccountResponse": {
+            "type": "object",
+            "properties": {
+                "payload": {
+                    "type": "string"
                 },
                 "status": {
                     "$ref": "#/definitions/examples.SuccessStatusMessage"
@@ -199,6 +259,35 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "requests.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "age",
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "example": 25
+                },
+                "email": {
+                    "type": "string",
+                    "example": "example@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 8,
+                    "example": "123425678"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "user"
                 }
             }
         }

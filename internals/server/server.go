@@ -61,6 +61,7 @@ func (s *Server) Init(address string) {
 	apis.Get("/docs/*", basicauth.New(basicAuthMiddleware), swagger.HandlerDefault)
 	apis.Get("/monitor", basicauth.New(basicAuthMiddleware), monitor.New(monitor.Config{Title: "Monitor Page"}))
 
+	routes.SetupRoutesAuth(s.fib, s.db)
 	routes.SetupRoutesAccount(s.fib, s.db)
 
 	err := s.fib.Listen(address)
