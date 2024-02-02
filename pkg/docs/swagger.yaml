@@ -1,4 +1,111 @@
 basePath: /apis
+definitions:
+  examples.FailedCommonResponse:
+    properties:
+      payload: {}
+      status:
+        $ref: '#/definitions/examples.FailedStatusMessage'
+    type: object
+  examples.FailedStatusMessage:
+    properties:
+      code:
+        example: "0001"
+        type: string
+      description:
+        type: string
+      error:
+        example: error message
+        type: string
+      message:
+        example: Failed
+        type: string
+      service:
+        type: string
+    type: object
+  examples.SuccessAccountsGetAllResponse:
+    properties:
+      payload:
+        items:
+          $ref: '#/definitions/models.AccountModel'
+        type: array
+      status:
+        $ref: '#/definitions/examples.SuccessStatusMessage'
+    type: object
+  examples.SuccessStatusMessage:
+    properties:
+      code:
+        example: "0000"
+        type: string
+      description:
+        type: string
+      message:
+        example: Success
+        type: string
+      service:
+        type: string
+    type: object
+  models.AccountModel:
+    properties:
+      age:
+        example: 25
+        type: integer
+      blogs:
+        items:
+          $ref: '#/definitions/models.BlogModel'
+        type: array
+      created_at:
+        type: string
+      email:
+        example: example@gmail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      is_active:
+        example: true
+        type: boolean
+      is_deleted:
+        example: false
+        type: boolean
+      password:
+        type: string
+      updated_at:
+        type: string
+      username:
+        example: users
+        type: string
+    required:
+    - age
+    - email
+    - username
+    type: object
+  models.BlogModel:
+    properties:
+      account_id:
+        example: 1
+        type: integer
+      created_at:
+        type: string
+      description:
+        example: blog description
+        type: string
+      id:
+        example: 1
+        type: integer
+      is_active:
+        example: true
+        type: boolean
+      is_deleted:
+        example: false
+        type: boolean
+      name:
+        example: blog
+        type: string
+      updated_at:
+        type: string
+    required:
+    - name
+    type: object
 host: localhost:6476
 info:
   contact:
@@ -8,7 +115,26 @@ info:
   description: This is a Go Fiber Hexagonal API server.
   title: Go Fiber Hexagonal API
   version: "1.0"
-paths: {}
+paths:
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      description: Get List All Accounts Data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/examples.SuccessAccountsGetAllResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/examples.FailedCommonResponse'
+      summary: Get List All Accounts Data
+      tags:
+      - Accounts
 schemes:
 - http
 - https

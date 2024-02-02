@@ -16,5 +16,189 @@
     },
     "host": "localhost:6476",
     "basePath": "/apis",
-    "paths": {}
+    "paths": {
+        "/accounts": {
+            "get": {
+                "description": "Get List All Accounts Data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Get List All Accounts Data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/examples.SuccessAccountsGetAllResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/examples.FailedCommonResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "examples.FailedCommonResponse": {
+            "type": "object",
+            "properties": {
+                "payload": {},
+                "status": {
+                    "$ref": "#/definitions/examples.FailedStatusMessage"
+                }
+            }
+        },
+        "examples.FailedStatusMessage": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "0001"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string",
+                    "example": "error message"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Failed"
+                },
+                "service": {
+                    "type": "string"
+                }
+            }
+        },
+        "examples.SuccessAccountsGetAllResponse": {
+            "type": "object",
+            "properties": {
+                "payload": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AccountModel"
+                    }
+                },
+                "status": {
+                    "$ref": "#/definitions/examples.SuccessStatusMessage"
+                }
+            }
+        },
+        "examples.SuccessStatusMessage": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "0000"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Success"
+                },
+                "service": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AccountModel": {
+            "type": "object",
+            "required": [
+                "age",
+                "email",
+                "username"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "example": 25
+                },
+                "blogs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.BlogModel"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "example@gmail.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "is_active": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "is_deleted": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "password": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "users"
+                }
+            }
+        },
+        "models.BlogModel": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "account_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "blog description"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "is_active": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "is_deleted": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "name": {
+                    "type": "string",
+                    "example": "blog"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }
