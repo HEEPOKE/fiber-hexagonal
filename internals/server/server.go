@@ -35,7 +35,12 @@ func NewServer(db *gorm.DB) *Server {
 		EnableSplittingOnParsers: true,
 	})
 
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "*",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowMethods:     "GET, POST, PATCH, DELETE",
+		AllowCredentials: true,
+	}))
 	app.Use(helmet.New())
 	app.Use(recover.New())
 	app.Use(logger.New(logger.Config{
