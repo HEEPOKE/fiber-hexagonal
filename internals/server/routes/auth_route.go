@@ -9,11 +9,14 @@ import (
 )
 
 func SetupRoutesAuth(app *fiber.App, db *gorm.DB) {
-	authRepository := repositories.NewAuthRepository(db)
+	accountRepository := repositories.NewAccountRepository(db)
+
+	authRepository := repositories.NewAuthRepository(db, accountRepository)
 	authService := services.NewAuthService(authRepository)
 	authHandler := handlers.NewAuthHandler(*authService)
 
 	auth := app.Group("/apis/auth")
 
 	auth.Post("/register", authHandler.Register)
+	auth.Post("/login", authHandler.Login)
 }

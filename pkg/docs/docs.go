@@ -57,6 +57,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/login": {
+            "post": {
+                "description": "login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "login",
+                "parameters": [
+                    {
+                        "description": "Login Request",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/examples.SuccessLoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/examples.FailedCommonResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/register": {
             "post": {
                 "description": "register account",
@@ -139,6 +179,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/models.AccountModel"
                     }
+                },
+                "status": {
+                    "$ref": "#/definitions/examples.SuccessStatusMessage"
+                }
+            }
+        },
+        "examples.SuccessLoginResponse": {
+            "type": "object",
+            "properties": {
+                "payload": {
+                    "$ref": "#/definitions/response.LoginResponse"
                 },
                 "status": {
                     "$ref": "#/definitions/examples.SuccessStatusMessage"
@@ -262,10 +313,24 @@ const docTemplate = `{
                 }
             }
         },
+        "requests.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.RegisterRequest": {
             "type": "object",
             "required": [
-                "age",
                 "email",
                 "password",
                 "username"
@@ -273,6 +338,8 @@ const docTemplate = `{
             "properties": {
                 "age": {
                     "type": "integer",
+                    "maximum": 130,
+                    "minimum": 0,
                     "example": 25
                 },
                 "email": {
@@ -283,11 +350,22 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 20,
                     "minLength": 8,
-                    "example": "123425678"
+                    "example": "12345678"
                 },
                 "username": {
                     "type": "string",
                     "example": "user"
+                }
+            }
+        },
+        "response.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         }

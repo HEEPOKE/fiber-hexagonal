@@ -23,3 +23,21 @@ func (a *AccountRepository) GetAccountsAll() ([]*models.AccountModel, error) {
 
 	return accounts, nil
 }
+
+func (a *AccountRepository) GetAccountDataWithId(accountID uint) (*models.AccountModel, error) {
+	var accountData *models.AccountModel
+	if err := a.conn.First(&accountData, accountID).Error; err != nil {
+		return nil, err
+	}
+
+	return accountData, nil
+}
+
+func (a *AccountRepository) GetAccountDataWithEmail(email string) (*models.AccountModel, error) {
+	var accountData models.AccountModel
+	if err := a.conn.Where("email = ?", email).First(&accountData).Error; err != nil {
+		return nil, err
+	}
+
+	return &accountData, nil
+}

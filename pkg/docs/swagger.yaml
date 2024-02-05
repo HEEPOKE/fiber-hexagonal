@@ -31,6 +31,13 @@ definitions:
       status:
         $ref: '#/definitions/examples.SuccessStatusMessage'
     type: object
+  examples.SuccessLoginResponse:
+    properties:
+      payload:
+        $ref: '#/definitions/response.LoginResponse'
+      status:
+        $ref: '#/definitions/examples.SuccessStatusMessage'
+    type: object
   examples.SuccessRegisterAccountResponse:
     properties:
       payload:
@@ -113,16 +120,28 @@ definitions:
     required:
     - name
     type: object
+  requests.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   requests.RegisterRequest:
     properties:
       age:
         example: 25
+        maximum: 130
+        minimum: 0
         type: integer
       email:
         example: example@gmail.com
         type: string
       password:
-        example: "123425678"
+        example: "12345678"
         maxLength: 20
         minLength: 8
         type: string
@@ -130,10 +149,16 @@ definitions:
         example: user
         type: string
     required:
-    - age
     - email
     - password
     - username
+    type: object
+  response.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
     type: object
 host: localhost:6476
 info:
@@ -170,6 +195,32 @@ paths:
       summary: Get List All Accounts Data
       tags:
       - Accounts
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      parameters:
+      - description: Login Request
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/examples.SuccessLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/examples.FailedCommonResponse'
+      summary: login
+      tags:
+      - Auth
   /auth/register:
     post:
       consumes:

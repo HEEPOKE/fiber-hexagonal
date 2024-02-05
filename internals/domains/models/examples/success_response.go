@@ -1,6 +1,14 @@
 package examples
 
-import "github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
+import (
+	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
+	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models/response"
+)
+
+type SuccessLoginResponse struct {
+	Status  SuccessStatusMessage   `json:"status"`
+	PayLoad response.LoginResponse `json:"payload"`
+}
 
 type SuccessRegisterAccountResponse struct {
 	Status  SuccessStatusMessage `json:"status"`

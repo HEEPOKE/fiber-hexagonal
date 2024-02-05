@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/HEEPOKE/fiber-hexagonal/internals/app/helpers"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/app/services"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models/requests"
@@ -30,47 +31,23 @@ func NewAuthHandler(authService services.AuthService) *AuthHandler {
 // @Success 200 {object} examples.SuccessRegisterAccountResponse
 // @Failure 400 {object} examples.FailedCommonResponse
 func (ah *AuthHandler) Register(c *fiber.Ctx) error {
-	var DataRequest requests.RegisterRequest
-	if err := c.BodyParser(&DataRequest); err != nil {
-		errorMessage := err.Error()
-		responseData := response.StatusMessage{
-			Code:        constants.CODE_FAILED,
-			Message:     constants.MESSAGE_FAIL,
-			Service:     constants.AUTH_SERVICE,
-			Description: constants.AUTH_REGISTER_ACCOUNT_FAILED,
-			Error:       &errorMessage,
-		}
-
-		return c.Status(fiber.StatusBadRequest).JSON(response.ResponseMessage{
-			Status:  responseData,
-			Payload: nil,
-		})
+	var dataRequest requests.RegisterRequest
+	if err := c.BodyParser(&dataRequest); err != nil {
+		return helpers.SendErrorResponse(c, err, constants.AUTH_SERVICE, constants.AUTH_REGISTER_ACCOUNT_FAILED)
 	}
 
 	isActive := true
 	newAccount := models.AccountModel{
-		Email:    DataRequest.Email,
-		UserName: DataRequest.UserName,
-		Password: &DataRequest.Password,
-		Age:      DataRequest.Age,
+		Email:    dataRequest.Email,
+		UserName: dataRequest.UserName,
+		Password: &dataRequest.Password,
+		Age:      dataRequest.Age,
 		IsActive: &isActive,
 	}
 
 	result, err := ah.authService.Register(&newAccount)
 	if err != nil {
-		errorMessage := err.Error()
-		responseData := response.StatusMessage{
-			Code:        constants.CODE_FAILED,
-			Message:     constants.MESSAGE_FAIL,
-			Service:     constants.AUTH_SERVICE,
-			Description: constants.AUTH_REGISTER_ACCOUNT_FAILED,
-			Error:       &errorMessage,
-		}
-
-		return c.Status(fiber.StatusBadRequest).JSON(response.ResponseMessage{
-			Status:  responseData,
-			Payload: nil,
-		})
+		return helpers.SendErrorResponse(c, err, constants.AUTH_SERVICE, constants.AUTH_REGISTER_ACCOUNT_FAILED)
 	}
 
 	statusMessage := response.StatusMessage{
@@ -83,5 +60,44 @@ func (ah *AuthHandler) Register(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response.ResponseMessage{
 		Status:  statusMessage,
 		Payload: result.CreatedAt,
+	})
+}
+
+// Login
+// @Summary login
+// @Description login
+// @Tags Auth
+// @Accept application/json
+// @Produce json
+// @param Body body requests.LoginRequest true "Login Request"
+// @Router /auth/login [post]
+// @Success 200 {object} examples.SuccessLoginResponse
+// @Failure 400 {object} examples.FailedCommonResponse
+func (ah *AuthHandler) Login(c *fiber.Ctx) error {
+	var loginRequest requests.LoginRequest
+	if err := c.BodyParser(&loginRequest); err != nil {
+		return helpers.SendErrorResponse(c, err, constants.AUTH_SERVICE, constants.AUTH_LOGIN_ACCOUNT_FAILED)
+	}
+
+	accessToken, refreshToken, err := ah.authService.CreateTokens(loginRequest)
+	if err != nil {
+		return helpers.SendErrorResponse(c, err, constants.AUTH_SERVICE, constants.AUTH_LOGIN_ACCOUNT_FAILED)
+	}
+
+	statusMessage := response.StatusMessage{
+		Code:        constants.CODE_SUCCESS,
+		Message:     constants.MESSAGE_SUCCESS,
+		Service:     constants.AUTH_SERVICE,
+		Description: constants.AUTH_LOGIN_ACCOUNT_SUCCESS,
+	}
+
+	result := response.LoginResponse{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}
+
+	return c.Status(fiber.StatusOK).JSON(response.ResponseMessage{
+		Status:  statusMessage,
+		Payload: result,
 	})
 }
