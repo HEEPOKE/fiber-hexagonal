@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"errors"
+
 	"github.com/HEEPOKE/fiber-hexagonal/internals/app/helpers"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/app/services"
+	"github.com/HEEPOKE/fiber-hexagonal/internals/core/common"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models/requests"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models/response"
@@ -34,6 +37,11 @@ func (ah *AuthHandler) Register(c *fiber.Ctx) error {
 	var dataRequest requests.RegisterRequest
 	if err := c.BodyParser(&dataRequest); err != nil {
 		return helpers.SendErrorResponse(c, err, constants.AUTH_SERVICE, constants.AUTH_REGISTER_ACCOUNT_FAILED)
+	}
+
+	validateRequest := common.ValidateCommon(dataRequest)
+	if validateRequest != "" {
+		return helpers.SendErrorResponse(c, errors.New(validateRequest), constants.AUTH_SERVICE, constants.AUTH_LOGIN_ACCOUNT_FAILED)
 	}
 
 	isActive := true
@@ -77,6 +85,11 @@ func (ah *AuthHandler) Login(c *fiber.Ctx) error {
 	var loginRequest requests.LoginRequest
 	if err := c.BodyParser(&loginRequest); err != nil {
 		return helpers.SendErrorResponse(c, err, constants.AUTH_SERVICE, constants.AUTH_LOGIN_ACCOUNT_FAILED)
+	}
+
+	validateRequest := common.ValidateCommon(loginRequest)
+	if validateRequest != "" {
+		return helpers.SendErrorResponse(c, errors.New(validateRequest), constants.AUTH_SERVICE, constants.AUTH_LOGIN_ACCOUNT_FAILED)
 	}
 
 	accessToken, refreshToken, err := ah.authService.CreateTokens(loginRequest)
