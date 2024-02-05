@@ -31,6 +31,13 @@ definitions:
       status:
         $ref: '#/definitions/examples.SuccessStatusMessage'
     type: object
+  examples.SuccessAccountsProfileResponse:
+    properties:
+      payload:
+        $ref: '#/definitions/response.AccountResponseModel'
+      status:
+        $ref: '#/definitions/examples.SuccessStatusMessage'
+    type: object
   examples.SuccessLoginResponse:
     properties:
       payload:
@@ -153,6 +160,35 @@ definitions:
     - password
     - username
     type: object
+  response.AccountResponseModel:
+    properties:
+      age:
+        example: 25
+        type: integer
+      blogs:
+        items:
+          $ref: '#/definitions/models.BlogModel'
+        type: array
+      created_at:
+        type: string
+      email:
+        example: example@gmail.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      is_active:
+        example: true
+        type: boolean
+      is_deleted:
+        example: false
+        type: boolean
+      updated_at:
+        type: string
+      username:
+        example: users
+        type: string
+    type: object
   response.LoginResponse:
     properties:
       access_token:
@@ -193,6 +229,31 @@ paths:
           schema:
             $ref: '#/definitions/examples.FailedCommonResponse'
       summary: Get List All Accounts Data
+      tags:
+      - Accounts
+  /accounts/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get Accounts Profile
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/examples.SuccessAccountsProfileResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/examples.FailedCommonResponse'
+      summary: Get Accounts Profile
       tags:
       - Accounts
   /auth/login:

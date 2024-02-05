@@ -57,6 +57,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/accounts/profile": {
+            "get": {
+                "description": "Get Accounts Profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Get Accounts Profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/examples.SuccessAccountsProfileResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/examples.FailedCommonResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "login",
@@ -179,6 +217,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/models.AccountModel"
                     }
+                },
+                "status": {
+                    "$ref": "#/definitions/examples.SuccessStatusMessage"
+                }
+            }
+        },
+        "examples.SuccessAccountsProfileResponse": {
+            "type": "object",
+            "properties": {
+                "payload": {
+                    "$ref": "#/definitions/response.AccountResponseModel"
                 },
                 "status": {
                     "$ref": "#/definitions/examples.SuccessStatusMessage"
@@ -355,6 +404,47 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "example": "user"
+                }
+            }
+        },
+        "response.AccountResponseModel": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "example": 25
+                },
+                "blogs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.BlogModel"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "example@gmail.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "is_active": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "is_deleted": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "users"
                 }
             }
         },

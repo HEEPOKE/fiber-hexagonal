@@ -18,4 +18,5 @@ func SetupRoutesAccount(app *fiber.App, db *gorm.DB) {
 	account.Use(middleware.JwtMiddleware())
 
 	account.Get("/", accountHandler.GetListAccountAll)
+	account.Get("/profile", accountHandler.GetAccountProfile)
 }

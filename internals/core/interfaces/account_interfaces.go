@@ -1,8 +1,12 @@
 package interfaces
 
-import "github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
+import (
+	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models"
+	"github.com/HEEPOKE/fiber-hexagonal/internals/domains/models/response"
+)
 
 type AccountRepositoryInterface interface {
-	GetAccountsAll() ([]*models.AccountModel, error)
-	GetAccountDataWithId(accountID uint) (*models.AccountModel, error)
+	GetAccountsAll() ([]*response.AccountResponseModel, error)
+	GetAccountDataWithId(accountID float64) (*response.AccountResponseModel, error)
+	GetAccountDataWithEmail(email string) (*models.AccountModel, error)
 }
