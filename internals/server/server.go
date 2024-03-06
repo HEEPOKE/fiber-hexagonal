@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/HEEPOKE/fiber-hexagonal/internals/server/routes"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/configs"
@@ -14,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/gofiber/swagger"
 	"gorm.io/gorm"
 )
@@ -43,6 +43,7 @@ func NewServer(db *gorm.DB) *Server {
 	}))
 	app.Use(helmet.New())
 	app.Use(recover.New())
+	app.Use(requestid.New())
 	app.Use(logger.New(logger.Config{
 		Format:     "[${ip}]:${port} ${status} - ${method} ${path}\n",
 		TimeFormat: "02-Jan-2006",
@@ -55,7 +56,7 @@ func NewServer(db *gorm.DB) *Server {
 	}
 }
 
-func (s *Server) Init(address string) {
+func (s *Server) Init() *fiber.App {
 	basicAuthMiddleware := basicauth.Config{
 		Users: map[string]string{
 			"admin": "        ",
@@ -69,8 +70,5 @@ func (s *Server) Init(address string) {
 	routes.SetupRoutesAuth(s.fib, s.db)
 	routes.SetupRoutesAccount(s.fib, s.db)
 
-	err := s.fib.Listen(address)
-	if err != nil {
-		log.Fatalf("Failed To Start The Server: %v", err)
-	}
+	return s.fib
 }

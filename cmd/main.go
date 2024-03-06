@@ -32,5 +32,9 @@ func main() {
 
 	address := fmt.Sprintf(":%s", configs.Cfg.PORT)
 	route := server.NewServer(db)
-	route.Init(address)
+	fib := route.Init()
+	err = fib.Listen(address)
+	if err != nil {
+		log.Fatalf("Failed To Start The Server: %v", err)
+	}
 }
