@@ -30,7 +30,7 @@ func NewServer(db *gorm.DB) *Server {
 		AppName:                  version,
 		CaseSensitive:            true,
 		StrictRouting:            true,
-		Prefork:                  true,
+		Prefork:                  false,
 		EnablePrintRoutes:        true,
 		EnableSplittingOnParsers: true,
 	})
