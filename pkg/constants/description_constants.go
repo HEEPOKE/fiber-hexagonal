@@ -9,4 +9,5 @@ const (
 	ACCOUNT_LIST_ALL_FAILED       = "get accounts all failed"
 	GET_ACCOUNT_PROFILE_SUCCESS   = "get account profile success"
 	GET_ACCOUNT_PROFILE_FAILED    = "get account profile failed"
+	AUTH_API_KEY_FAILED           = "missing or malformed API Key"
 )

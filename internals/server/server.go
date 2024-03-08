@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 
+	"github.com/HEEPOKE/fiber-hexagonal/internals/core/middleware"
 	"github.com/HEEPOKE/fiber-hexagonal/internals/server/routes"
 	"github.com/HEEPOKE/fiber-hexagonal/pkg/configs"
 	_ "github.com/HEEPOKE/fiber-hexagonal/pkg/docs"
@@ -10,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
+	"github.com/gofiber/fiber/v2/middleware/keyauth"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -66,6 +68,12 @@ func (s *Server) Init() *fiber.App {
 	apis := s.fib.Group("/apis")
 	apis.Get("/docs/*", basicauth.New(basicAuthMiddleware), swagger.HandlerDefault)
 	apis.Get("/monitor", basicauth.New(basicAuthMiddleware), monitor.New(monitor.Config{Title: "Monitor Page"}))
+
+	apisAuth := s.fib.Group("/apis")
+	apisAuth.Use(keyauth.New(middleware.ConfigDefault))
+	apisAuth.Get("/mr", func(c *fiber.Ctx) error {
+		return c.SendString("Welcome")
+	})
 
 	routes.SetupRoutesAuth(s.fib, s.db)
 	routes.SetupRoutesAccount(s.fib, s.db)
